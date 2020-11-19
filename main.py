@@ -162,7 +162,7 @@ model = Model(inputs=inputs, outputs=predictions) # model denotes a NN that maps
 
 
 ### Optimizer, loss, and evaluation metrics
-optimizer= keras.optimizers.adam(lr=learning_rate,clipnorm=1.)
+optimizer= keras.optimizers.Adam(lr=learning_rate,clipnorm=1.)
 model.compile(optimizer=optimizer,loss='binary_crossentropy', metrics=[errors]) # loss='mean_squared_error' is another option. 
 
 ### Summary of NN model 
@@ -173,7 +173,7 @@ print(model.summary())
 # Train a model or load pre-trained model 
 ##########################################
 
-if training == False: # Load pre-trained model 
+if training != False: # Load pre-trained model 
         print("Loading trained model from ", args.path_trained_model)
         model.load_weights(args.path_trained_model)
         
@@ -182,9 +182,12 @@ else:
     noisy_codewords, true_messages, _ = generate_examples(k_test=k, step_of_history=200, SNR=0, code_rate = 2) 
     print('Training examples are generated')
 
+    # train_history = model.fit(x=noisy_codewords, y=true_messages, batch_size=train_batch_size,
+    #             callbacks=[change_lr],
+    #             epochs=num_epoch, validation_split=0.1)  # starts training
     train_history = model.fit(x=noisy_codewords, y=true_messages, batch_size=train_batch_size,
                 callbacks=[change_lr],
-                epochs=num_epoch, validation_split=0.1)  # starts training
+                epochs=1, validation_split=0.1)  # starts training
 
     model.save_weights('MyTrainedModel.h5')
     
