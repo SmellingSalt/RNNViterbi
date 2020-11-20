@@ -182,12 +182,12 @@ else:
     noisy_codewords, true_messages, _ = generate_examples(k_test=k, step_of_history=200, SNR=0, code_rate = 2) 
     print('Training examples are generated')
 
-    # train_history = model.fit(x=noisy_codewords, y=true_messages, batch_size=train_batch_size,
-    #             callbacks=[change_lr],
-    #             epochs=num_epoch, validation_split=0.1)  # starts training
     train_history = model.fit(x=noisy_codewords, y=true_messages, batch_size=train_batch_size,
                 callbacks=[change_lr],
-                epochs=1, validation_split=0.1)  # starts training
+                epochs=num_epoch, validation_split=0.1)  # starts training
+    # train_history = model.fit(x=noisy_codewords, y=true_messages, batch_size=train_batch_size,
+    #             callbacks=[change_lr],
+    #             epochs=1, validation_split=0.1)  # starts training
 
     model.save_weights('MyTrainedModel.h5')
     
