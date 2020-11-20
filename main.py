@@ -27,6 +27,13 @@ from examples import * # Generating pairs of (noisy codewords, true messages)
 import time
 import logging
 
+if len(tf.config.list_physical_devices('GPU'))!=0: # If GPU is available
+# os.environ["CUDA_VISIBLE_DEVICES"]="0" #Ensures only 1 GPU is used
+    gpus = tf.config.experimental.list_physical_devices('GPU')# Lists all available GPUs
+    tf.config.experimental.set_visible_devices(gpus[0], 'GPU')# Forces it to use only gpu 0
+    tf.config.experimental.set_memory_growth(gpus[0], True)# Forces Tensorflow to use as much memory as needed
+else:
+    print("No GPUs found. Running on CPU")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -73,9 +80,9 @@ test_batch_size  = 100
 # Tx Encoder Parameters
 code_rate   =  2                     #  2,3
 
-k = 2000000                            # Number of total message bits for training. 
+k = 20000#2000000                            # Number of total message bits for training. 
 step_of_history = 200                # Length of each message bit sequence
-k_test = 1000000                        # Number of total message bits for testing. 
+k_test = 10000#1000000                        # Number of total message bits for testing. 
 
 
 # Rx Decoder Parameters
