@@ -3,8 +3,8 @@
 % 
 %%
 
-constraint_length = 3;
-TRELLIS = poly2trellis(constraint_length, [7 5]); 
+constraint_length = 7;
+TRELLIS = poly2trellis(7,[165 67]);%poly2trellis(constraint_length, [7 5]); 
 
 close all;
 
@@ -61,6 +61,8 @@ for idx = 1:SNR_points
         
         encodedData = step(hConEnc, data);
         noisy_encodedData = 2*encodedData-1 + test_sigmas(idx)*randn(size(encodedData));
+        noisy_encodedData(noisy_encodedData>0.5)=1;
+        noisy_encodedData(noisy_encodedData<=0.5)=0;
         if tail == true 
             noisy_received=reshape(noisy_encodedData,[code_rate,frameLength+constraint_length-1])';
         else

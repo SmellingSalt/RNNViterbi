@@ -169,7 +169,7 @@ model = Model(inputs=inputs, outputs=predictions) # model denotes a NN that maps
 
 ### Optimizer, loss, and evaluation metrics
 optimizer= keras.optimizers.Adam(lr=learning_rate,clipnorm=1.)
-model.compile(optimizer=optimizer,loss='mse') # loss='mean_squared_error' is another option. 
+model.compile(optimizer=optimizer,loss='binary_crossentropy', metrics=[errors]) # loss='mean_squared_error' is another option. 
 
 ### Summary of NN model 
 print(model.summary())
