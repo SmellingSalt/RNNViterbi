@@ -6,7 +6,7 @@ from keras import backend as K
 import tensorflow as tf
 import keras
 from keras.models import Model#,Sequential
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input,Embedding
 from keras.layers.normalization import BatchNormalization
 # from keras.layers.core import Lambda
 from keras.layers.convolutional import Conv1D#, Conv2D
@@ -55,7 +55,7 @@ def get_args():
     parser.add_argument('-rx_type', choices=['rnn-lstm', 'rnn-gru', 'cnn'], default='rnn-gru')
     parser.add_argument('-num_rx_layer', type=int, default=2)
     parser.add_argument('-rnn_rx_dir', choices=['sd','bd'], default='bd')
-    parser.add_argument('-rnn_n_unit', type=int, default=50)
+    parser.add_argument('-rnn_n_unit', type=int, default=8)
 
     args = parser.parse_args()
 
@@ -129,10 +129,14 @@ change_lr = LearningRateScheduler(scheduler)
 ##########################################
 
 
-
-inputs = Input(shape=(step_of_history, code_rate)) # For each batch (one noisy codeword), input is of size (message length, 1)
-x = inputs # Noisy codeword 
-
+args.rx_type='rnn-lstm'
+args.num_rx_layer=2
+rx_direction='nbd'
+num_hunit_rnn_rx=7
+inputs=Input(shape=(None,))
+# inputs = Input(shape=(step_of_history, code_rate)) # For each batch (one noisy codeword), input is of size (message length, 1)
+emb=Embedding(input_dim=1,output_dim=code_rate, input_length=None)(inputs)
+x = emb#inputs # Noisy codeword 
 ### Defining Decoder Architecture 
 if args.rx_type == 'rnn-gru':
     for layer in range(args.num_rx_layer):
@@ -162,7 +166,7 @@ elif args.rx_type == 'cnn':
 else:
     print('not supported')
 
-predictions = TimeDistributed(Dense(1, activation='sigmoid'))(x) # Soft decoding. For each batch, prediction is of size (message length, 1)
+predictions = TimeDistributed(Dense(1, activation='linear'))(x) # Soft decoding. For each batch, prediction is of size (message length, 1)
 
 model = Model(inputs=inputs, outputs=predictions) # model denotes a NN that maps inputs to predictions. 
 
@@ -270,4 +274,4 @@ plt.ylabel('BLER')
 plt.legend(loc='upper right')
 plt.yscale('log')
 plt.show()
-
+#%%

@@ -101,7 +101,7 @@ for idx = 1:SNR_points
         y_data(counter,:)=data;
     end
     save( strcat(num2str(idx),"_ytest.mat"),'y_data');    
-    save(strcat(num2str(idx),"_xtest.mat"),'x_data');
+    save(strcat(num2str(idx),"_xte.mat"),'x_data');
 end
 
 % Average out over trials
