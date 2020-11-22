@@ -57,8 +57,8 @@ K=log2(TRELLIS.numInputSymbols);
 N=log2(TRELLIS.numOutputSymbols);
 L=log2(TRELLIS.numStates); %Constraint Length
 
-y_data=zeros(num_test,frameLength,K);
-x_data=zeros(num_test,frameLength,N);
+y_data=zeros(num_test,50,K);
+x_data=zeros(num_test,50,1);
 for idx = 1:SNR_points
     idx
     for counter = 1:num_test
@@ -97,11 +97,11 @@ for idx = 1:SNR_points
         if sum(abs(map_decc-data))>0
             map_nb_bl_errors(idx) = map_nb_bl_errors(idx)+1; % count MAP BLER 
         end
-        x_data(counter,:)=noisy_encodedData;
-        y_data(counter,:)=data;
+        x_data(counter,:)=bits2sym(8,noisy_encodedData)';
+        y_data(counter,:)=bits2sym(4,data)';
     end
-    save( strcat(num2str(idx),"_ytest.mat"),'y_data');    
-    save(strcat(num2str(idx),"_xtest.mat"),'x_data');
+    save( strcat(num2str(idx),"_ydectest.mat"),'y_data');    
+    save(strcat(num2str(idx),"_xdectest.mat"),'x_data');
 end
 
 % Average out over trials
@@ -133,3 +133,4 @@ test_SNRs
 vit_BER
 
 vit_BLER
+

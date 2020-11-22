@@ -97,11 +97,11 @@ for idx = 1:SNR_points
         if sum(abs(map_decc-data))>0
             map_nb_bl_errors(idx) = map_nb_bl_errors(idx)+1; % count MAP BLER 
         end
-        x_data(counter,:)=noisy_encodedData;
+        x_data(counter,:)=bits2symnoisy_encodedData;
         y_data(counter,:)=data;
     end
-    save( strcat(num2str(idx),"_ytest.mat"),'y_data');    
-    save(strcat(num2str(idx),"_xte.mat"),'x_data');
+    save( strcat(num2str(idx),"_ydec.mat"),'y_data');    
+    save(strcat(num2str(idx),"_xdec.mat"),'x_data');
 end
 
 % Average out over trials
@@ -133,3 +133,4 @@ test_SNRs
 vit_BER
 
 vit_BLER
+
